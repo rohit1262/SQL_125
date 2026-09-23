@@ -1,0 +1,29 @@
+Q1.List all the columns of the Salespeople table.
+
+mysql> select * from salespeople;
+
+
+2.List all customers with a rating of 100.
+mysql> select cnum,cname from customers where rating = 100;
+
+3.Find all records in the Customer table with NULL values in the city column. 
+ select city from customers where city is null;
+
+
+4.Find the largest order taken by each salesperson on each date. 
+
+
+mysql> select s.snum,s.sname,o.odate,o.amt
+    ->  from salespeople s
+    ->  join orders o
+    -> on s.snum = o.snum
+    -> where amt =
+    ->  (select max(o1.amt)
+    ->   from orders o1
+    ->  where o.snum = o1.snum
+    ->  and o.odate = o1.odate);
+
+
+
+5.Arrange the Orders table by descending customer number. 
+select * from orders order by cnum desc;
