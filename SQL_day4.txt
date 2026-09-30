@@ -1,0 +1,68 @@
+16. Find all customers with orders on October 3.
+
+select o.cnum,c.cname from orders o join customers c on o.cnum=c.cnum where o.odate= 10/03/96;
+
+mysql> SELECT *
+    -> FROM orders
+    -> WHERE odate = '1996-10-03';
++------+---------+------------+------+------+
+| onum | amt     | odate      | cnum | snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1996-10-03 | 2008 | 1007 |
+| 3002 | 1900.10 | 1996-10-03 | 2007 | 1004 |
+| 3003 |  767.19 | 1996-10-03 | 2001 | 1001 |
+| 3005 | 5160.45 | 1996-10-03 | 2003 | 1002 |
+| 3006 | 1098.16 | 1996-10-03 | 2008 | 1007 |
++------+---------+------------+------+------+
+
+17.Give the sums of the amounts from the Orders table, grouped by date, eliminating all those 
+dates where the SUM was not at least 2000.00 above the MAX amount.
+
+ select sum(amt)as total_sum,odate from orders where amt>2000 group by odate;
++-----------+------------+
+| total_sum | odate      |
++-----------+------------+
+|   5160.45 | 1996-10-03 |
+|   4723.00 | 1996-10-05 |
+|   9891.88 | 1996-10-06 |
++-----------+------------+
+
+. 
+18. Select all orders that had amounts that were greater than at least one of the orders from 
+October 6. 
+
+mysql> select onum,amt,odate from orders where amt >(select min(amt) from orders where odate='1996-10-06');
++------+---------+------------+
+| onum | amt     | odate      |
++------+---------+------------+
+| 3002 | 1900.10 | 1996-10-03 |
+| 3005 | 5160.45 | 1996-10-03 |
+| 3008 | 4723.00 | 1996-10-05 |
+| 3009 | 1713.23 | 1996-10-04 |
+| 3011 | 9891.88 | 1996-10-06 |
++------+---------+------------+
+
+19. Write a query that uses the EXISTS operator to extract all salespeople who have customers 
+with a rating of 300. 
+select s.snum,s.sname,s.city from salespeople s join customers c on s.snum=c.snum where c.rating = 300;-- this is without exists operator.
+
+ SELECT s.snum, s.sname, s.city
+     FROM salespeople s
+     WHERE EXISTS (
+        SELECT 1
+         FROM customers c
+         WHERE c.snum = s.snum
+           AND c.rating = 300
+     );
+
+ select s.snum,s.sname,s.city from salespeople s where exists ( select 1 from customers c where c.snum = s.snum and c.rating = 300);
++------+--------+-----------+
+| snum | sname  | city      |
++------+--------+-----------+
+| 1002 | Serres | San Jose  |
+| 1007 | Rifkin | Barcelona |
++------+--------+-----------+
+
+
+20. Find all pairs of customers having the same rating. 
+

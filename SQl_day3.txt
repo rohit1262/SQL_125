@@ -1,0 +1,65 @@
+11. Match salespeople to customers according to what city they lived in. 
+
+select s.snum,s.sname,c.city from customers c join salespeople s on c.snum = s.snum ;
+
+select s.snum,s.sname,c.city from customers c join salespeople s on c.snum = s.snum ;
++------+---------+----------+
+| snum | sname   | city     |
++------+---------+----------+
+| 1001 | Peel    | London   |
+| 1003 | AxelRod | Rome     |
+| 1002 | Serres  | San Jose |
+| 1002 | Serres  | Berlin   |
+| 1001 | Peel    | London   |
+| 1004 | Motika  | Rome     |
+| 1007 | Rifkin  | San Jose |
++------+---------+----------+
+
+12. Find the largest order taken by each salesperson.
+select s.snum,s.sname,o.amt from salespeople s join orders o on s.snum= o.snum where amt = (select max(o.amt) from orders o); // first approach 
+
+select s.sname , max(amt) from salespeople s join orders o on s.snum=o.snum group by s.snum;
+
+
+mysql> select s.sname,s.snum, max(amt) from salespeople s join orders o on s.snum=o.snum group by s.snum order by amt desc;
++---------+------+----------+
+| sname   | snum | max(amt) |
++---------+------+----------+
+| Serres  | 1002 |  5160.45 |
+| Motika  | 1004 |  1900.10 |
+| Peel    | 1001 |  9891.88 |
+| AxelRod | 1003 |  1713.23 |
+| Rifkin  | 1007 |  1098.16 |
++---------+------+----------+
+
+13Fi.nd customers in San Jose who have a rating above 200. 
+
+--select cnum,cname,rating from customers where city = 'San Jose' and rating > 200;
+select cnum,cname,city,rating from customers where city = 'San Jose' and rating > 200;
++------+----------+----------+--------+
+| cnum | cname    | city     | rating |
++------+----------+----------+--------+
+| 2008 | Cisneros | San Jose |    300 |
++------+----------+----------+--------+
+
+14.. List the names and commissions of all salespeople in London
+ select sname,comm from salespeople where city = 'london';
++--------+------+
+| sname  | comm |
++--------+------+
+| Peel   | 0.12 |
+| Motika | 0.11 |
+| Fran   | 0.26 |
++--------+------+
+
+15 List all the orders of salesperson Motika from the Orders table. 
+
+select * from orders o join salespeople s on o.snum = s.snum where s.sname ='motika';
+
+select o.onum,o.amt,o.odate,o.cnum,s.snum from orders o join salespeople s on o.snum = s.snum where s.sname ='motika';
++------+---------+------------+------+------+
+| onum | amt     | odate      | cnum | snum |
++------+---------+------------+------+------+
+| 3002 | 1900.10 | 1996-10-03 | 2007 | 1004 |
++------+---------+------------+------+------+
+
