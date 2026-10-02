@@ -1,0 +1,59 @@
+21. Find all customers whose CNUM is 1000 above the SNUM of Serres. 
+
+select cname,cnum from customers where cnum =(select snum+1000 from salespeoples where name = "serres");
+select cname,cnum from customers where cnum =(select snum+1000 from salespeople where sname = "serres");
++----------+------+
+| cname    | cnum |
++----------+------+
+| Giovanni | 2002 |
++----------+------+
+1 row in set (0.02 sec)
+
+22. Give the salespeople’s commissions as percentages instead of decimal numbers. 
+
+select snum,sname,city,comm *100 as commission from salespeople;
++------+---------+-----------+------------+
+| snum | sname   | city      | commission |
++------+---------+-----------+------------+
+| 1001 | Peel    | London    |      12.00 |
+| 1002 | Serres  | San Jose  |      13.00 |
+| 1003 | AxelRod | New York  |      10.00 |
+| 1004 | Motika  | London    |      11.00 |
+| 1005 | Fran    | London    |      26.00 |
+| 1007 | Rifkin  | Barcelona |      15.00 |
++------+---------+-----------+------------+
+6 rows in set (0.01 sec)
+
+23. Find the largest order taken by each salesperson on each date, eliminating those MAX orders 
+which are less than $3000.00 in value. 
+
+select onum,amt,odate, snum from orders group by odate where amt > 3000;
++------+---------+------------+------+
+| onum | amt     | odate      | snum |
++------+---------+------------+------+
+| 3005 | 5160.45 | 1996-10-03 | 1002 |
+| 3008 | 4723.00 | 1996-10-05 | 1001 |
+| 3011 | 9891.88 | 1996-10-06 | 1001 |
++------+---------+------------+------+
+
+24.. List the largest orders for October 3, for each salesperson
+
+select o.onum,o.amt,o.odate,o.snum,s.sname from orders o join salespeople s on o.snum = s.snum where  o.odate = '1996-10-03' and o.amt =( select max(o2.amt) from orders o2 where o2.snum = o.snum and o2.odate = o.odate);
+
++------+---------+------------+------+--------+
+| onum | amt     | odate      | snum | sname  |
++------+---------+------------+------+--------+
+| 3002 | 1900.10 | 1996-10-03 | 1004 | Motika |
+| 3003 |  767.19 | 1996-10-03 | 1001 | Peel   |
+| 3005 | 5160.45 | 1996-10-03 | 1002 | Serres |
+| 3006 | 1098.16 | 1996-10-03 | 1007 | Rifkin |
++------+---------+------------+------+--------+
+25.. Find all customers located in cities where Serres (SNUM 1002) has customers. 
+select c.cnum,c.cname, c.city , c.snum from customers c join salespeople s on c.snum = s.snum where c.snum=1002;
+
++------+-------+----------+------+
+| cnum | cname | city     | snum |
++------+-------+----------+------+
+| 2003 | Liu   | San Jose | 1002 |
+| 2004 | Grass | Berlin   | 1002 |
++------+-------+----------+------+
