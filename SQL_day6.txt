@@ -1,0 +1,56 @@
+25.. Find all customers located in cities where Serres (SNUM 1002) has customers. 
+select c.cnum,c.cname, c.city , c.snum from customers c join salespeople s on c.snum = s.snum where c.snum=1002;
+
++------+-------+----------+------+
+| cnum | cname | city     | snum |
++------+-------+----------+------+
+| 2003 | Liu   | San Jose | 1002 |
+| 2004 | Grass | Berlin   | 1002 |
++------+-------+----------+------+
+26. Select all customers with a rating above 200.00. 
+------+----------+----------+--------+------+
+| cnum | cname    | city     | rating | snum |
++------+----------+----------+--------+------+
+| 2004 | Grass    | Berlin   |    300 | 1002 |
+| 2008 | Cisneros | San Jose |    300 | 1007 |
++------+----------+----------+--------+------+
+
+27.. Count the number of salespeople currently listing orders in the Orders table. 
+
+SELECT COUNT(DISTINCT snum)
+    -> FROM orders;
++----------------------+
+| COUNT(DISTINCT snum) |
++----------------------+
+|                    5 |
++----------------------+
+
+28. Write a query that produces all customers serviced by salespeople with a commission above 
+12%. Output the customer’s name and the salesperson’s rate of commission. 
+
+select c.cname,s.comm from customers c join salespeople s on c.snum = s.snum where s.comm >.12 group by c.cname;
++----------+------+
+| cname    | comm |
++----------+------+
+| Liu      | 0.13 |
+| Grass    | 0.13 |
+| Cisneros | 0.15 |
++----------+------+
+
+29.Find salespeople who have multiple customers. 
+select s.snum,s.sname from salespeople s join customers c on s.snum = c.snum group by s.snum,s.sname HAVING COUNT(c.snum)>1;
++------+--------+
+| snum | sname  |
++------+--------+
+| 1001 | Peel   |
+| 1002 | Serres |
++------+--------
+
+30.Find salespeople with customers located in their city. 
+select distinct s.snum,s.sname from salespeople s join customers c on s.snum = c.snum and s.city = c.city;
++------+--------+
+| snum | sname  |
++------+--------+
+| 1001 | Peel   |
+| 1002 | Serres |
++------+--------+
